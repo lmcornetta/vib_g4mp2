@@ -22,15 +22,20 @@ def Et(T):
 def Er(T):
     return 1.5*R*T
 
-def Ev(T,vib_temp):
+def Ev(T, vib_temp):
     nvib = len(vib_temp)
     Ev = 0 
+    if T == 0.:
+        for i in range(nvib):
+            theta = vib_temp[i]
+            Ev += theta*0.5
+        return R*Ev
     for i in range(nvib):
         theta = vib_temp[i]
         Ev += theta*(0.5 + 1/(np.exp(theta/T)-1))
     return R*Ev
  
-def Etot(T,vib_temp):
+def Etot(T, vib_temp):
     print(" Translational energy:\t" + str(Et(T)))
     print(" Rotational energy:\t" + str(Er(T)))
     print(" Vibrational energy:\t" + str(Ev(T,vib_temp)) + "\n")
@@ -38,17 +43,17 @@ def Etot(T,vib_temp):
     return Et(T) + Er(T) + Ev(T,vib_temp)
 
 # Entropy
-def St(mass,T,P):
+def St(mass, T, P):
     Zt = (mass*R*T/(2*np.pi))**1.5
     qt = Zt*R*T/P
     return R*(np.log(qt) + 2.5)
 
-def Sr(Ix,Iy,Iz,T,sigmar):
+def Sr(Ix, Iy, Iz, T, sigmar):
     Zr = T**1.5/np.sqrt(Ix*Iy*Iz)
     qr = np.sqrt(np.pi)*Zr/sigmar
     return R*(np.log(qr) + 1.5)
 
-def Sv(T,vib_temp):
+def Sv(T, vib_temp):
     nvib = len(vib_temp)
     Sv = 0
     for i in range(nvib):
@@ -59,13 +64,13 @@ def Sv(T,vib_temp):
 def Se(spin_mult):
     return R*np.log(spin_mult)
 
-def Stot(mass,T,P,Ix,Iy,Iz,sigmar,vib_temp,spin_mult):
+def Stot(mass, T, P, Ix, Iy, Iz, sigmar, vib_temp, spin_mult):
     print(" Translational entropy:\t" + str(St(mass,T,P)))
     print(" Rotational entropy:\t" + str(Sr(Ix,Iy,Iz,T,sigmar)))
     print(" Vibrational entropy:\t" + str(Sv(T,vib_temp)))
     print(" Electronic entropy:\t" + str(Se(spin_mult)) + "\n")
 
-    return St(mass,T,P) + Sr(Ix,Iy,Iz,T,sigmar) + Sv(T,vib_temp) + Se(spin_mult)
+    return St(mass, T, P) + Sr(Ix, Iy, Iz, T, sigmar) + Sv(T, vib_temp) + Se(spin_mult)
 
 if __name__=="__main__":
 
@@ -78,14 +83,16 @@ if __name__=="__main__":
     P = 1.0                                                 # Pressure (atm)
     P *= P_conv
 
-    mass = 235.09091                                        # mass (a.m.u)
-    mass *= mass_conv
+    mass = 210.08521                                        # mass (a.m.u)
     spin_mult = 1                                           # spin multiplicity
-
-    Ix, Iy, Iz = 0.04960, 0.00959, 0.00804                  # Rotational temperatures (Kelvin)
+    Ix, Iy, Iz = 0.04329, 0.02375, 0.01743                  # Rotational temperatures (Kelvin)
     sigmar = 1                                              # Rotational symmetry number
 
-    E = Etot(T,vib_temp)
-    S = Stot(mass,T,P,Ix,Iy,Iz,sigmar,vib_temp,spin_mult)
-    print(" Vib. free energy at T = 0K (ZPE):\t" + str(E))
+    mass *= mass_conv
+
+    E0 = Etot(0., vib_temp)
+    E = Etot(T, vib_temp)
+    S = Stot(mass, T, P, Ix, Iy, Iz, sigmar, vib_temp, spin_mult)
+    print(" Vib. free energy at T = 0K (ZPE):\t" + str(E0))
+    print(" Vib. energy at T = %fK:\t"%T + str(E))
     print(" Vib. free energy at T = %fK:\t"%T + str(E+T*R-T*S))
