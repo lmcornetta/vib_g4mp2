@@ -21,7 +21,6 @@ def catch_hp_g09(LogFile):
                 return True
         return False
 
-
 def catch_N_atoms_g09(LogFile):
 
     """ 
@@ -41,7 +40,6 @@ def catch_N_atoms_g09(LogFile):
     N_atoms = geometryFinalLine - geometryLine0
     return N_atoms
 
-
 def catch_rot_symmetry_number(LogFile):
     """
         Catch rotational symmetry number
@@ -57,8 +55,6 @@ def catch_rot_symmetry_number(LogFile):
 
         rot_number = int(str(rot_line.split()[-1])[:-1])
         return rot_number
-
-
 
 def catch_atom_list_g09(LogFile,N_atoms):
  
@@ -82,8 +78,6 @@ def catch_atom_list_g09(LogFile,N_atoms):
                 atom_list.append(line.split()[0])    
 
     return atom_list
-
-
 
 def catch_geom_g09(LogFile):
 
@@ -114,8 +108,6 @@ def catch_geom_g09(LogFile):
 
     return geom
 
-
-
 def catch_freq_g09(LogFile,hp=True):
 
     """
@@ -145,7 +137,6 @@ def catch_freq_g09(LogFile,hp=True):
                         freq.append(float(line.split()[i]))  
 
     return freq
-
 
 def catch_rot_temp(LogFile):
     """
@@ -180,7 +171,6 @@ def catch_spin_mult(LogFile):
         spin_mult = int(spin_line.split()[-1])
         return spin_mult
 
-
 def catch_mol_mass(LogFile):
     """
         Catch total molecular mass
@@ -196,7 +186,6 @@ def catch_mol_mass(LogFile):
 
         mass = float(mass_line.split()[-2])
         return mass
-
 
 def catch_red_mass_g09(LogFile,hp=True):
 
@@ -228,8 +217,6 @@ def catch_red_mass_g09(LogFile,hp=True):
 
     return red_mass
 
-
-
 def catch_ir_intensity_g09(LogFile,hp=True):
 
     """
@@ -259,8 +246,6 @@ def catch_ir_intensity_g09(LogFile,hp=True):
                         ir_intensity.append(float(line.split()[i]))  
 
     return ir_intensity
-
-
 
 def catch_displacement_vectors_g09(LogFile,hp=True):
 
