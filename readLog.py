@@ -144,15 +144,20 @@ def catch_rot_temp(LogFile):
     """
 
     with open(LogFile) as f:
-
+        
         for line_number, line in enumerate(f):
             if "Rotational temperatures (Kelvin)" in line:
                 Ix = float(line.split()[-3])
                 Iy = float(line.split()[-2])
                 Iz = float(line.split()[-1])
-
                 break
 
+            if "Rotational temperature (Kelvin)" in line:
+                Ix = float(line.split()[-1])
+                Iy = float(line.split()[-1])
+                Iz = float(line.split()[-1])
+                break
+                
         return Ix, Iy, Iz
 
 def catch_spin_mult(LogFile):
